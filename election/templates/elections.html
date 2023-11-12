@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Election System</title>
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom styles to adjust padding -->
+    <style>
+        .nav-item { padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar navigation -->
+          <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky" style="height:1000px;">
+                    <br>
+                    <ul class="nav flex-column">
+                        {% if request.user.is_voter %}
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/member/voter/home/">My Profile</a>
+                            </li>
+                        {% elif request.user.is_candidate %}
+                        <li class="nav-item">
+                                <a class="nav-link active" href="/member/candidate/home/">My Profile</a>
+                            </li>
+                        {% else %}
+                        <li class="nav-item">
+                                <a class="nav-link active" href="/member/admin/home/">My Profile</a>
+                            </li>
+                        {% endif %}
+                        {% if request.user.is_superuser or request.user.is_voter %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/all/candidates/">See Candidates </a>
+                        </li>
+                        {% endif %}
+                        {% if request.user.is_superuser or request.user.is_candidate %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/all/voters/">See Voters</a>
+                        </li>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/elections/new/">Add New Election</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/show/elections/">See Elections</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/logout/">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content area -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <br>
+                <h3 class="text-center">Elections</h3>
+                <br>
+                <!-- Display elections if available -->
+                {% if elections %}
+                <div class="row">
+                    {% for election in elections %}
+                        <div class="col-md-6">
+                            <div class="card">
+                                <!-- Election details -->
+                                <div class="card-body">
+                                    <h4 class="card-title">Name: {{ election.name }}</h4>
+                                    <p class="card-text">Instructions: {{ election.additional_notes }}</p>
+                                    <p class="card-text">Date: {{ election.date_of_election }} - {{ election.voting_start_time }} - {{ election.voting_end_time }}</p>
+
+                                    <p class="card-text">Results Date: {{ election.result_announcement_date }}</p>
+                                    <!-- Display actions based on user role and election status -->
+                                    {% if request.user.is_voter %}
+                                        {% if election.has_concluded %}
+                                            <!-- Show election results -->
+                                            <a href="/election/results/{{ election.pk }}" class="btn">See Election Results</a>
+                                        {% else %}
+                                            <p><b>Election results not yet declared</b></p>
+                                            {% if election.vote_cast %}
+                                                <p><b>You have already voted.</b></p>
+                                            {% else %}
+                                                <!-- Link to vote -->
+                                                <a href="/cast/vote/{{ election.pk }}" class="btn btn-primary">Cast Vote</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% elif request.user.is_candidate %}
+                                        <!-- Candidate view -->
+                                        {% if election.has_concluded %}
+                                            <a href="/election/results/{{ election.pk }}" >See Election Results</a>
+                                        {% else %}
+                                            <p><b>Election results not yet declared</b></p>
+                                        {% endif %}
+                                    {% else %}
+                                        <!-- Admin view -->
+                                        <a href="/election/results/{{ election.pk }}" class="btn btn-primary">Declare Election Results</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <!-- Display a message if no elections are present -->
+                    <p class="text-center"><b>No elections present in the system. Admin users needs to add new election</b></p>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS for interaction -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

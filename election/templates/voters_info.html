@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Election System</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap-theme.min.css">
+    <!-- Custom CSS -->
+    <style>
+        .nav-item{
+            padding-bottom:20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky" style="height:1000px;">
+                    <br>
+                    <ul class="nav flex-column">
+                        {% if request.user.is_voter %}
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/member/voter/home/">My Profile</a>
+                            </li>
+                        {% elif request.user.is_candidate %}
+                        <li class="nav-item">
+                                <a class="nav-link active" href="/member/candidate/home/">My Profile</a>
+                            </li>
+                        {% else %}
+                        <li class="nav-item">
+                                <a class="nav-link active" href="/member/admin/home/">My Profile</a>
+                            </li>
+                        {% endif %}
+                        {% if request.user.is_superuser or request.user.is_voter %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/all/candidates/">See Candidates </a>
+                        </li>
+                        {% endif %}
+                        {% if request.user.is_superuser or request.user.is_candidate %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/all/voters/">See Voters</a>
+                        </li>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/elections/new/">Add New Election</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/show/elections/">See Elections</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/logout/">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" style="background-color:rgb(252,250,250);">
+                <br><br>
+                <h3 class="text-center" >All Voters</h3>
+                <br>
+                {% if voters %}
+                    <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Voter #</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Address</th>
+                        <th>Biography</th>
+                        <th>Is verified</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for voter in voters %}
+                    <tr>
+                        <td>{{voter.account.username}}</td>
+                        <td>{{voter.voter_unique_id}}</td>
+                        <td>{{voter.account.first_name}}</td>
+                        <td>{{voter.account.last_name}}</td>
+                        <td>{{voter.account.email}}</td>
+                        <td>{{voter.gender}}</td>
+                        <td>{{voter.residence}}</td>
+                        <td>{{voter.biography}}</td>
+                        <td>
+                            {% if request.user.is_superuser %}
+                                {% if voter.is_validated %}
+                                     Verified
+                                {% else %}
+                                    <a href="/verify/voter/{{voter.pk}}/">Verify Voter</a>
+                                {% endif %}
+                            {% elif request.user.is_candidate %}
+                                {% if voter.is_validated %}
+                                     Account Details Verified
+                                {% else %}
+                                    Awaiting for verification
+                                {% endif %}
+                            {% else %}
+                                 {% if voter.is_validated %}
+                                     Account Details Verified
+                                {% else %}
+                                    Awaiting for verification
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p class="text-center">
+                        No voter information found in the system.
+                    </p>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

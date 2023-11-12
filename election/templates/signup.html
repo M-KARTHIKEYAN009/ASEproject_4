@@ -1,0 +1,102 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Custom input field background color */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="number"],
+        textarea,
+        select {
+            background-color: #f8f9fa; /* Light grey color, you can change it to any light color you prefer */
+            border-radius: 0.25rem; /* Optional: adds rounded corners to the input fields */
+        }
+
+        /* Change placeholder text color if needed */
+        ::placeholder {
+            color: #6c757d; /* Dark grey color, you can adjust the shade if needed */
+        }
+
+        /* Improve the style of the form errors */
+        .help-block {
+            color: gray; /* Bootstrap danger color for error messages */
+        }
+.btn-custom-voter {
+    background-color: #fd7e14;
+    color: white;
+  }
+.checkboxs{
+    vertical-align:middle !important;
+}
+.custom-button{
+    width:200px;
+     background-color: #fd7e14;
+    color:white;
+}
+#hint_id_password1{
+    display:none;
+}
+    </style>
+ <script type="text/javascript">
+// When the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the user type from Django template variable
+    var userType = '{{ user_type }}';
+
+    // Select all the checkboxes
+    var candidateCheckbox = document.querySelector('input[name="is_candidate"]');
+    var superuserCheckbox = document.querySelector('input[name="is_superuser"]');
+    var voterCheckbox = document.querySelector('input[name="is_voter"]');
+
+    // Based on the userType, check the corresponding checkbox and disable others
+    if (userType === 'candidate') {
+        candidateCheckbox.checked = true;
+        superuserCheckbox.disabled = true;
+        voterCheckbox.disabled = true;
+    } else if (userType === 'admin') {
+        superuserCheckbox.checked = true;
+        candidateCheckbox.disabled = true;
+        voterCheckbox.disabled = true;
+    } else if (userType === 'voter') {
+        voterCheckbox.checked = true;
+        candidateCheckbox.disabled = true;
+        superuserCheckbox.disabled = true;
+    }
+});
+</script>
+
+</head>
+<body>
+<div class="container">
+    <br>
+    <h2 class="text-center">Sign up as an {{ user_type|title }}</h2>
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+
+             <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                 <center>
+                     <button type="submit" class="btn custom-button">Sign up</button>
+                 </center>
+<br><br>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and its dependencies below, if not already included -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

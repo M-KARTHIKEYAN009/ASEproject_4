@@ -1,0 +1,64 @@
+{% extends 'website_base.html' %} {% load crispy_forms_tags %} {% load static %} {% block child_template %} <head>
+<head>
+    <style>
+        select{
+            width:100%;
+            display:block !important;
+        }
+    </style>
+</head>
+    <div id="child_template">
+    <br>
+    <h1 class="screen-header text-center">
+        Cast your vote
+    </h1>
+    <br>
+    <div class="row">
+        <div class="col-md-3 col-lg-3"></div>
+        <div class="col-md-6 col-lg-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Election Date</th>
+                    <th>Result Date</th>
+                    <th>Election Commission Note</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{election.election_name}}</td>
+                    <td>{{election.election_date}}</td>
+                    <td>{{election.election_result_date}}</td>
+                    <td>{{election.description}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <form id="election" method="post">
+                {% csrf_token %}
+                <div id="candidates_div" class="control-group">
+                    <label for="candidates" class="control-label">
+                        Select Candidate
+                    </label>
+                    <div class="controls">
+                        <select name="candidate" class="form-control form-control-solid select" id="candidates">
+                            {% for c in candidates %}
+                                <option value="{{c.pk}}">{{c.member.first_name}},{{c.member.last_name}} - Party ({{c.political_party}})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <center>
+                    <button type="submit" class="btn screen-primary-btn">
+                    Cast Vote
+                </button>
+                    <br><br><br>    <br>
+                </center>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

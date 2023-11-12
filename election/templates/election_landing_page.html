@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Election System</title>
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<!-- Include Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+<!-- Inline CSS for custom button colors -->
+<style>
+  .btn-custom-voter {
+    background-color: #fd7e14;
+    color: white;
+  }
+  .btn-custom-candidate {
+    background-color: #fd7e14;
+    color: white;
+  }
+  .btn-custom-admin {
+    background-color: #fd7e14;
+    color: white;
+  }
+</style>
+</head>
+<body>
+
+<div class="container py-5">
+  <!-- Title -->
+  <div class="row">
+    <div class="col-12 text-center mb-5">
+      <h1>Online Election System</h1>
+    </div>
+  </div>
+
+  <!-- Cards Row -->
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+
+    <div class="col">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="bi bi-lock-fill" style="font-size: 2rem; color: #FFC107;"></i>
+          <h5 class="card-title">Admin</h5>
+          <p class="card-text">Manage candidate registrations, verify documents, and maintain the system’s security. .</p>
+          <div class="d-grid gap-2 d-md-block">
+            <a href="/signup/admin/" class="btn btn-custom-voter">Signup as Admin</a>
+            <a href="/login/admin/" class="btn btn-outline-dark">Admin Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Voter Card -->
+    <div class="col">
+
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="bi bi-person-fill" style="font-size: 2rem; color: #4CAF50;"></i>
+          <h5 class="card-title">Voter</h5>
+          <p class="card-text">Participate in the democratic process. Register to gain access to candidate information and vote securely in your designated elections.</p>
+          <div class="d-grid gap-2 d-md-block">
+            <a href="/signup/voter/" class="btn btn-custom-voter">Signup as Voter</a>
+            <a href="/login/voter/" class="btn btn-outline-dark">Login to Vote</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Candidate Card -->
+    <div class="col">
+      <br>
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="bi bi-person-lines-fill" style="font-size: 2rem; color: #2196F3;"></i>
+          <h5 class="card-title">Candidate</h5>
+          <p class="card-text">
+          Join the electoral process with ease. Securely register, receive your unique ID, and cast your vote for your preferred candidate.
+          </p>
+          <div class="d-grid gap-2 d-md-block">
+            <a href="/signup/candidate/" class="btn btn-custom-candidate">Signup as Candidate</a>
+            <a href="login/candidate/" class="btn btn-outline-dark">Candidate Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Card -->
+
+
+  </div>
+</div>
+
+<!-- Include Bootstrap JS and its dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
